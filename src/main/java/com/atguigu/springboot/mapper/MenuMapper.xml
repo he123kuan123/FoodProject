@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.MenuMapper">
+  <select id="showAllMenu" resultType="bean.Menu">
+    select * from menu 
+  </select>
+  
+    <select id="queryMenuByNameAndType" resultType="bean.Menu">
+   SELECT* FROM menu WHERE mname LIKE "%"#{mname}"%" AND mtype LIKE "%"#{mtype}"%"
+  </select>
+  
+
+<insert id="addMenu">
+INSERT INTO menu (mname,murl,mtype,mmaterial,mtaste,mdescription,maddtime)VALUES (#{mname},#{murl},#{mtype},#{mmaterial},#{mtaste},#{mdescription},#{maddtime})
+</insert>
+
+  <resultMap id="BaseResultMap" type="bean.Menu">
+    <id column="mid" jdbcType="INTEGER" property="mid" />
+    <result column="mname" jdbcType="VARCHAR" property="mname" />
+    <result column="murl" jdbcType="VARCHAR" property="murl" />
+    <result column="mtype" jdbcType="VARCHAR" property="mtype" />
+    <result column="mmaterial" jdbcType="VARCHAR" property="mmaterial" />
+    <result column="mtaste" jdbcType="VARCHAR" property="mtaste" />
+    <result column="maddtime" jdbcType="VARCHAR" property="maddtime" />
+    <result column="mscore" jdbcType="VARCHAR" property="mscore" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="bean.Menu">
+    <result column="mdescription" jdbcType="LONGVARCHAR" property="mdescription" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    mid, mname, murl, mtype, mmaterial, mtaste, maddtime, mscore
+  </sql>
+  <sql id="Blob_Column_List">
+    mdescription
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="bean.MenuExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from menu
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="bean.MenuExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from menu
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from menu
+    where mid = #{mid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from menu
+    where mid = #{mid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="bean.MenuExample">
+    delete from menu
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="bean.Menu">
+    insert into menu (mid, mname, murl, 
+      mtype, mmaterial, mtaste, 
+      maddtime, mscore, mdescription
+      )
+    values (#{mid,jdbcType=INTEGER}, #{mname,jdbcType=VARCHAR}, #{murl,jdbcType=VARCHAR}, 
+      #{mtype,jdbcType=VARCHAR}, #{mmaterial,jdbcType=VARCHAR}, #{mtaste,jdbcType=VARCHAR}, 
+      #{maddtime,jdbcType=VARCHAR}, #{mscore,jdbcType=VARCHAR}, #{mdescription,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="bean.Menu">
+    insert into menu
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="mid != null">
+        mid,
+      </if>
+      <if test="mname != null">
+        mname,
+      </if>
+      <if test="murl != null">
+        murl,
+      </if>
+      <if test="mtype != null">
+        mtype,
+      </if>
+      <if test="mmaterial != null">
+        mmaterial,
+      </if>
+      <if test="mtaste != null">
+        mtaste,
+      </if>
+      <if test="maddtime != null">
+        maddtime,
+      </if>
+      <if test="mscore != null">
+        mscore,
+      </if>
+      <if test="mdescription != null">
+        mdescription,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="mid != null">
+        #{mid,jdbcType=INTEGER},
+      </if>
+      <if test="mname != null">
+        #{mname,jdbcType=VARCHAR},
+      </if>
+      <if test="murl != null">
+        #{murl,jdbcType=VARCHAR},
+      </if>
+      <if test="mtype != null">
+        #{mtype,jdbcType=VARCHAR},
+      </if>
+      <if test="mmaterial != null">
+        #{mmaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="mtaste != null">
+        #{mtaste,jdbcType=VARCHAR},
+      </if>
+      <if test="maddtime != null">
+        #{maddtime,jdbcType=VARCHAR},
+      </if>
+      <if test="mscore != null">
+        #{mscore,jdbcType=VARCHAR},
+      </if>
+      <if test="mdescription != null">
+        #{mdescription,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="bean.MenuExample" resultType="java.lang.Long">
+    select count(*) from menu
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update menu
+    <set>
+      <if test="record.mid != null">
+        mid = #{record.mid,jdbcType=INTEGER},
+      </if>
+      <if test="record.mname != null">
+        mname = #{record.mname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.murl != null">
+        murl = #{record.murl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mtype != null">
+        mtype = #{record.mtype,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mmaterial != null">
+        mmaterial = #{record.mmaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mtaste != null">
+        mtaste = #{record.mtaste,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maddtime != null">
+        maddtime = #{record.maddtime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mscore != null">
+        mscore = #{record.mscore,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mdescription != null">
+        mdescription = #{record.mdescription,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update menu
+    set mid = #{record.mid,jdbcType=INTEGER},
+      mname = #{record.mname,jdbcType=VARCHAR},
+      murl = #{record.murl,jdbcType=VARCHAR},
+      mtype = #{record.mtype,jdbcType=VARCHAR},
+      mmaterial = #{record.mmaterial,jdbcType=VARCHAR},
+      mtaste = #{record.mtaste,jdbcType=VARCHAR},
+      maddtime = #{record.maddtime,jdbcType=VARCHAR},
+      mscore = #{record.mscore,jdbcType=VARCHAR},
+      mdescription = #{record.mdescription,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update menu
+    set mid = #{record.mid,jdbcType=INTEGER},
+      mname = #{record.mname,jdbcType=VARCHAR},
+      murl = #{record.murl,jdbcType=VARCHAR},
+      mtype = #{record.mtype,jdbcType=VARCHAR},
+      mmaterial = #{record.mmaterial,jdbcType=VARCHAR},
+      mtaste = #{record.mtaste,jdbcType=VARCHAR},
+      maddtime = #{record.maddtime,jdbcType=VARCHAR},
+      mscore = #{record.mscore,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="bean.Menu">
+    update menu
+    <set>
+      <if test="mname != null">
+        mname = #{mname,jdbcType=VARCHAR},
+      </if>
+      <if test="murl != null">
+        murl = #{murl,jdbcType=VARCHAR},
+      </if>
+      <if test="mtype != null">
+        mtype = #{mtype,jdbcType=VARCHAR},
+      </if>
+      <if test="mmaterial != null">
+        mmaterial = #{mmaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="mtaste != null">
+        mtaste = #{mtaste,jdbcType=VARCHAR},
+      </if>
+      <if test="maddtime != null">
+        maddtime = #{maddtime,jdbcType=VARCHAR},
+      </if>
+      <if test="mscore != null">
+        mscore = #{mscore,jdbcType=VARCHAR},
+      </if>
+      <if test="mdescription != null">
+        mdescription = #{mdescription,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where mid = #{mid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="bean.Menu">
+    update menu
+    set mname = #{mname,jdbcType=VARCHAR},
+      murl = #{murl,jdbcType=VARCHAR},
+      mtype = #{mtype,jdbcType=VARCHAR},
+      mmaterial = #{mmaterial,jdbcType=VARCHAR},
+      mtaste = #{mtaste,jdbcType=VARCHAR},
+      maddtime = #{maddtime,jdbcType=VARCHAR},
+      mscore = #{mscore,jdbcType=VARCHAR},
+      mdescription = #{mdescription,jdbcType=LONGVARCHAR}
+    where mid = #{mid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="bean.Menu">
+    update menu
+    set mname = #{mname,jdbcType=VARCHAR},
+      murl = #{murl,jdbcType=VARCHAR},
+      mtype = #{mtype,jdbcType=VARCHAR},
+      mmaterial = #{mmaterial,jdbcType=VARCHAR},
+      mtaste = #{mtaste,jdbcType=VARCHAR},
+      maddtime = #{maddtime,jdbcType=VARCHAR},
+      mscore = #{mscore,jdbcType=VARCHAR}
+    where mid = #{mid,jdbcType=INTEGER}
+  </update>
+  
+  
+  
+  
+  
+  
+</mapper>
